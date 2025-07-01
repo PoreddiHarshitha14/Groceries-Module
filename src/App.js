@@ -6,6 +6,7 @@ function App() {
   const [sidebarVisible, setSidebarVisible] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
   const [activeNavItem, setActiveNavItem] = useState('#market');
+  const [favourites, setFavourites] = useState([false, false, false, false]);
 
   const toggleSidebar = () => {
     setSidebarVisible(!sidebarVisible);
@@ -17,6 +18,14 @@ function App() {
 
   const handleNavClick = (item) => {
     setActiveNavItem(item);
+  };
+
+  const handleFavouriteClick = (index) => {
+    setFavourites(favourites => {
+      const updated = [...favourites];
+      updated[index] = !updated[index];
+      return updated;
+    });
   };
 
   return (
@@ -126,7 +135,7 @@ function App() {
             <button className="menu-toggle" onClick={toggleSidebar}>
               <i className="fas fa-bars"></i>
             </button>
-            <div className="navbar-buttons">
+            <div className="navbar-buttons compact-gap">
               <button>BUY</button>
               <button>SELL</button>
             </div>
@@ -250,35 +259,43 @@ function App() {
                 <h3>Popular Product</h3>
                 <a href="#see-all" className="view-all">See All</a>
               </div>
-              <div className="products-grid">
-                <div className="product-item">
-                  <img src="product-cabbage.png" alt="Cabbage" />
-                  <div className="product-name">Cabbage</div>
-                  <div className="product-price">$15.30</div>
-                  <div className="product-info">239 orders</div>
-                  <button className="add-to-cart"><i className="fas fa-plus"></i></button>
-                </div>
-                <div className="product-item">
-                  <img src="product-kale.png" alt="Kale Vegetables" />
-                  <div className="product-name">Kale Vegetables</div>
-                  <div className="product-price">$8.36</div>
-                  <div className="product-info">200 orders</div>
-                  <button className="add-to-cart"><i className="fas fa-plus"></i></button>
-                </div>
-                <div className="product-item">
-                  <img src="product-broccoli.png" alt="Broccoli" />
-                  <div className="product-name">Broccoli</div>
-                  <div className="product-price">$5.50</div>
-                  <div className="product-info">180 orders</div>
-                  <button className="add-to-cart"><i className="fas fa-plus"></i></button>
-                </div>
-                <div className="product-item">
-                  <img src="product-caroot.png" alt="Carrot" />
-                  <div className="product-name">Carrot</div>
-                  <div className="product-price">$4.80</div>
-                  <div className="product-info">150 orders</div>
-                  <button className="add-to-cart"><i className="fas fa-plus"></i></button>
-                </div>
+              <div className="products-grid popular-products-small">
+                {[{
+                  img: "product-cabbage.png",
+                  name: "Cabbage",
+                  price: "$15.30",
+                  info: "239 orders"
+                }, {
+                  img: "product-kale.png",
+                  name: "Kale Vegetables",
+                  price: "$8.36",
+                  info: "200 orders"
+                }, {
+                  img: "product-broccoli.png",
+                  name: "Broccoli",
+                  price: "$5.50",
+                  info: "180 orders"
+                }, {
+                  img: "product-caroot.png",
+                  name: "Carrot",
+                  price: "$4.80",
+                  info: "150 orders"
+                }].map((product, idx) => (
+                  <div className="product-item" key={product.name}>
+                    <button
+                      className={`favourite-btn${favourites[idx] ? ' active' : ''}`}
+                      onClick={() => handleFavouriteClick(idx)}
+                      aria-label="Add to favourite"
+                    >
+                      <i className="fas fa-heart"></i>
+                    </button>
+                    <img src={product.img} alt={product.name} />
+                    <div className="product-name">{product.name}</div>
+                    <div className="product-price">{product.price}</div>
+                    <div className="product-info">{product.info}</div>
+                    <button className="add-to-cart"><i className="fas fa-plus"></i></button>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
